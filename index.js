@@ -205,6 +205,8 @@ var employee_tracker = function () {
                             for (var i = 0; i < result.length; i++) {
                                 array.push(result[i].last_name);
                             }
+                            var employeeArray = [...new Set(array)];
+                            return employeeArray;
                         }
                     },
                     {
@@ -217,10 +219,33 @@ var employee_tracker = function () {
                             for (var i = 0; i < result.length; i++) {
                                 array.push(result[i].title);
                             }
+                            var newArray = [...new Set(array)];
+                            return newArray;
                         }
                     }
-                ])
+                ]).then((answers) => {
+                    for (var i = 0; i < result.length; i++) {
+                        if (result[i].last_name === answers.employee) {
+                            var name = result[i];
+                        }
+                    }
+
+                    for (var i = 0; i < result.length; i++) {
+                        if (result[i].title === answers.role) {
+                            var role = result[i];
+                        }
+                    }
+
+                    db.query(`UPDATE employee SET ? WHERE ?`, [{role_id: role}, {last_name: name}], (err, result) => {
+                        if (err) throw err;
+                        console.log(`Updated ${answers.employee} role to the database.`)
+                        employee_tracker();
+                    });
+                })
             })
+        } else if (answers.prompt === 'Log Out') {
+            db.end();
+            console.log("Good-Bye!");
         }
     })
 }
