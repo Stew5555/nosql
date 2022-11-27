@@ -16,7 +16,7 @@ var employee_tracker = function () {
     }]).then((answers) => {
         if (answers.prompt === 'View All Department') {
             db.query(`SELECT * FROM department`, (err, result) => {
-                if(err) throw err;
+                if (err) throw err;
                 console.log("viewing all of the departments: ");
                 console.table(result);
                 employee_tracker()
@@ -28,7 +28,7 @@ var employee_tracker = function () {
                 console.table(result);
                 employee_tracker();
             });
-        }else if (answers.prompt === 'View All Employees') {
+        } else if (answers.prompt === 'View All Employees') {
             db.query(`SELECT * FROM employee`, (err, result) => {
                 console.log("Viewing All Employees: ");
                 console.table(result);
@@ -117,11 +117,38 @@ var employee_tracker = function () {
                     });
                 })
             });
-        }else if (answers.prompt === 'Add An Employee'){
+        } else if (answers.prompt === 'Add An Employee') {
             db.query(`SELECT * FROM employee, role`, (err, result) => {
                 if (err) throw err
                 inquirer.prompt([
-                    
+                    {
+                        // Adding Employee First Name
+                        type: 'input',
+                        name: 'firstName',
+                        message: 'What is the employees first name?',
+                        validate: firstNameInput => {
+                            if (firstNameInput) {
+                                return true;
+                            } else {
+                                console.log('Please Add A First Name!');
+                                return false;
+                            }
+                        }
+                    },
+                    {
+                        // Adding Employee Last Name
+                        type: 'input',
+                        name: 'lastName',
+                        message: 'What is the employees last name?',
+                        validate: lastNameInput => {
+                            if (lastNameInput) {
+                                return true;
+                            } else {
+                                console.log('Please Add A Salary!');
+                                return false;
+                            }
+                        }
+                    },
                 ])
             })
         }
