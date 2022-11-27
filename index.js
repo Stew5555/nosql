@@ -30,6 +30,7 @@ var employee_tracker = function () {
             });
         }else if (answers.prompt === 'View All Employees') {
             db.query(`SELECT * FROM employee`, (err, result) => {
+                if (err) throw err;
                 console.log("Viewing All Employees: ");
                 console.table(result);
                 employee_tracker();
@@ -55,6 +56,57 @@ var employee_tracker = function () {
                     employee_tracker();
                 });
             })
+        } else if (answers.prompt === 'Add A Role') {
+            db.query(`SELECT * FROM department`, (err, result) => {
+                if (err) throw err;
+
+                inquirer.prompt([
+                    {
+                        // Adding A Role
+                        type: 'input',
+                        name: 'role',
+                        message: 'What is the name of the role?',
+                        validate: roleInput => {
+                            if (roleInput) {
+                                return true;
+                            } else {
+                                console.log('Please Add A Role!');
+                                return false;
+                            }
+                        }
+                    },
+                    {
+                        // Adding the Salary
+                        type: 'input',
+                        name: 'salary',
+                        message: 'What is the salary of the role?',
+                    },
+                    {
+                        // Department
+                        type: 'list',
+                        name: 'department',
+                        message: 'Which department does the role belong to?',
+                        choices: () => {
+                            var array = [];
+                            for (var i = 0; i < result.length; i++) {
+                                array.push(result[i].name);
+                            }
+                            return array;
+                        }
+                    }
+                ]).then((answers) => {
+                    for (var i = 0; i < result.length; i++) {
+                        if (result[i].name === answers.department) {
+                            var department = result[i];
+                        }
+                    }
+
+                    db.query(`INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`, [answers.role, answers.salary, department.id], (err, result) => {
+                        if (err) throw err;
+                        employee_tracker();
+                    });
+                })
+            });
         }
     })
 }
