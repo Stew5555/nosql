@@ -155,12 +155,15 @@ var employee_tracker = function () {
                         message: 'What is the employees role?',
                         choices: () => {
                             var array = [];
-                            for (var i = 0; i < result.length; i++) 
+                            for (var i = 0; i < result.length; i++) {
+                                array.push(result[i].title);
+                            }
                             var newArray = [...new Set(array)];
                             return newArray;
                         }
                     },
                     {
+                        // Adding Employee Manager
                         type: 'input',
                         name: 'manager',
                         message: 'Who is the employees manager?',
@@ -173,7 +176,13 @@ var employee_tracker = function () {
                             }
                         }
                     }
-                ])
+                ]).then(() => {
+                    db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, role.id, answers.manager.id], (err, result) => {
+                        if (err) throw err;
+                        console.log(`Added ${answers.firstName} ${answers.lastName} to the database.`)
+                        employee_tracker();
+                    });
+                })
             })
         }
     })
