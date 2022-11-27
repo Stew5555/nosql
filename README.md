@@ -12,4 +12,10 @@ Command-line application where you can manage company's employees database.
 A link to the [code](https://github.com/Stew5555/Employee-Tracker-noSQL):
 ```
 https://github.com/Stew5555/Employee-Tracker-noSQL
+```
+
+## Video
+A link to the [Video](https://watch.screencastify.com/v/H4hFcg5JoAMnU0xBdJ8j):
+```
+https://watch.screencastify.com/v/H4hFcg5JoAMnU0xBdJ8j
 ``` 

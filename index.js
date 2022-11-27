@@ -1,5 +1,6 @@
 // Variable Definitions & Dependencies
-const inquirer = require('inquirer');
+const inquirer = import('inquirer');
+const db = require('./db/connection');
 
 db.connect(err => {
     if (err) throw err;
